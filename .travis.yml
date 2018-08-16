@@ -3,14 +3,11 @@ cache:
   directories:
     - $HOME/.mix
 elixir:
-  - 1.6.3
+  - 1.7.2
 otp_release:
   - 20.1
 before_script:
   - export MIX_HOME=$HOME/.mix
   - export MIX_ENV=test
-  - chmod +x bin/setup
-  - chmod +x bin/test
 script:
   - bin/setup
-  - bin/test
