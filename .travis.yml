@@ -9,5 +9,8 @@ otp_release:
 before_script:
   - export MIX_HOME=$HOME/.mix
   - export MIX_ENV=test
+  - chmod +x bin/setup
+  - chmod +x bin/test
 script:
   - bin/setup
+  - bin/test
