@@ -8,7 +8,7 @@ Use to send push notifications to Exponent Experiences from an Elixir/Phoenix se
 
 ## Installation
 
-ExponentServerSdk is currently stable software. You can install it from Hex:
+ExponentServerSdk is currently able to push single and multiple messages to the Expo Server. You can install it from Hex:
 
 ```elixir
 def deps do
