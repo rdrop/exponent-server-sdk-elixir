@@ -23,8 +23,7 @@ defmodule ExponentServerSdk.ParserTest do
 
   test ".parse_list should decode into a list of named structs" do
     json = """
-    {
-      "data":
+    {"data":
       [
         {"status": "ok", "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"},
         {"status": "ok", "id": "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"}
