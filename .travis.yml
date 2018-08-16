@@ -13,3 +13,4 @@ before_script:
   - chmod +x bin/test
 script:
   - bin/setup
+  - bin/test
