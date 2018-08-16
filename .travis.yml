@@ -1,0 +1,13 @@
+language: elixir
+cache:
+  directories:
+    - $HOME/.mix
+elixir:
+  - 1.6.3
+otp_release:
+  - 20.1
+before_script:
+  - export MIX_HOME=$HOME/.mix
+  - export MIX_ENV=test
+script:
+  - bin/setup

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# This script sets up your local machine for development on ExponentServerSdk.
+
+echo "-------------------------------"
+echo "Installing dependencies..."
+echo "-------------------------------"
+
+mix local.hex --force || { echo "Could not install Hex!"; exit 1; }
+mix deps.get --only test || { echo "Could not install dependencies!"; exit 1;}
+
+echo "-------------------------------"
+echo "Running tests..."
+echo "-------------------------------"
+
+bin/test || { exit 1; }
