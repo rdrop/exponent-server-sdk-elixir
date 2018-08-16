@@ -57,7 +57,7 @@ defmodule ExponentServerSdk.NotificationTest do
     json = json_response(response, 200)
 
     with_fixture(:post!, json, fn ->
-      #expected = {
+      # expected = {
       #  :ok,
       #  [
       #    %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"},
