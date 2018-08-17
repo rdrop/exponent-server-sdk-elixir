@@ -26,7 +26,9 @@ def deps do
 end
 ```
 
-and run `mix deps.get`. Now, list the `:exponent_server_sdk` application as your application dependency:
+and run `mix deps.get`.
+
+Now, list the `:exponent_server_sdk` application as your application dependency:
 
 ```elixir
 def application do
@@ -40,7 +42,7 @@ end
 
 The `ExponentServerSdk.Notification` is responsible for sending the messages and hits the latest version of the api.
 
-####Single Message:
+#### Single Message:
 
 ```elixir
 
