@@ -2,13 +2,15 @@ ExponentServerSdk
 ========
 [![Hex.pm](https://img.shields.io/hexpm/v/exponent_server_sdk.svg)](https://hex.pm/packages/exponent_server_sdk)
 [![Build Status](https://travis-ci.org/rdrop/exponent-server-sdk-elixir.svg?branch=master)](https://travis-ci.org/rdrop/exponent-server-sdk-elixir)
-[![Inline docs](http://inch-ci.org/github/rdrop/exponent-server-sdk-elixir.svg?branch=master)](http://inch-ci.org/github/rdrop/exponent-server-sdk-elixir)
+[![Inline docs](https://inch-ci.org/github/rdrop/exponent-server-sdk-elixir.svg?branch=master)](https://inch-ci.org/github/rdrop/exponent-server-sdk-elixir)
 
 Use to send push notifications to Exponent Experiences from an Elixir/Phoenix server.
 
 ## Installation
 
-ExponentServerSdk is currently able to push single and multiple messages to the Expo Server. You can install it from Hex:
+ExponentServerSdk is currently able to push single and multiple messages to the Expo Server.
+
+You can install it from Hex:
 
 ```elixir
 def deps do
@@ -34,9 +36,9 @@ end
 
 ## Usage
 
-### Client
+### Notifications
 
-The push notification is the preferred way.  This hits the latest version of the api.
+The `ExponentServerSdk.Notification` is responsible for sending the messages and hits the latest version of the api.
 
 ####Single Message:
 
@@ -90,5 +92,8 @@ See the [CONTRIBUTING.md](CONTRIBUTING.md) file for contribution guidelines.
 ExponentServerSdk is licensed under the MIT license. For more details, see the `LICENSE`
 file at the root of the repository. It depends on Elixir, which is under the
 Apache 2 license.
+
+### Inspiration
+[ex_twilio](https://github.com/danielberkompas/ex_twilio)
 
 [hex]: http://hex.pm
