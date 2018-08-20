@@ -8,13 +8,15 @@ Use to send push notifications to Exponent Experiences from an Elixir/Phoenix se
 
 ## Installation
 
-ExponentServerSdk is currently able to push single and multiple messages to the Expo Server.
+ExponentServerSdk is currently able to push single and multiple messages to the Expo Server and retrieve message delivery statuses from a list of IDs.
+
+All HTTPoison Post Request body are automatically GZIP compressed
 
 You can install it from Hex:
 
 ```elixir
 def deps do
-  [{:exponent_server_sdk, "~> 0.1.0"}]
+  [{:exponent_server_sdk, "~> 0.2.0"}]
 end
 ```
 
@@ -40,7 +42,7 @@ end
 
 ### Notifications
 
-The `ExponentServerSdk.Notification` is responsible for sending the messages and hits the latest version of the api.
+The `ExponentServerSdk.PushNotification` is responsible for sending the messages and hits the latest version of the api.
 
 #### Single Message:
 
@@ -54,7 +56,7 @@ message = %{
   }
 
 # Send it to Expo
-{:ok, response} = ExponentServerSdk.Notification.push(message)
+{:ok, response} = ExponentServerSdk.PushNotification.push(message)
 
 # Example Response
 {:ok, %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}}
@@ -63,7 +65,7 @@ message = %{
 #### Multiple Messages:
 ```elixir
 
-# Create a list of message maps (auto chunks into lists of 100)
+# Create a list of message maps (auto chunks list into lists of 100)
 message_list = [
   %{
     to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]",
@@ -78,10 +80,23 @@ message_list = [
 ]
 
 # Send it to Expo
-{:ok, response} = ExponentServerSdk.Notification.push_list(messages)
+{:ok, response} = ExponentServerSdk.PushNotification.push_list(messages)
 
 # Example Response
 {:ok,[ %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}, %{"status" => "ok", "id" => "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"} ]}
+```
+
+#### Get Messages Delivery Statuses:
+```elixir
+
+# Create a list of message ids
+ids = ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"]
+
+# Send it to Expo
+{:ok, response} = ExponentServerSdk.PushNotification.get_receipts(ids)
+
+# Example Response
+{:ok,[ %{ "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX": { "status": "ok" }, "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY": { "status": "ok" } } ]}
 ```
 
 The complete format of the messages can be found [here.](https://docs.expo.io/versions/latest/guides/push-notifications#message-format)

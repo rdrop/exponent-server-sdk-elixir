@@ -1,12 +1,12 @@
-defmodule ExponentServerSdk.NotificationTest do
+defmodule ExponentServerSdk.PushNotificationTest do
   use ExUnit.Case, async: false
 
   import TestHelper
 
-  alias ExponentServerSdk.Notification
   alias ExponentServerSdk.PushMessage
+  alias ExponentServerSdk.PushNotification
 
-  doctest ExponentServerSdk.Notification
+  doctest ExponentServerSdk.PushNotification
 
   test ".push should return the proper response from Expo" do
     message_map = %{
@@ -29,11 +29,11 @@ defmodule ExponentServerSdk.NotificationTest do
              "\"ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]\" is not a registered push notification recipient"
          }}
 
-      assert expected == Notification.push(message_map)
+      assert expected == PushNotification.push(message_map)
     end)
   end
 
-  test ".push_list should return an error from Expo if the does not accept request" do
+  test ".push_list should return the proper response from Expo" do
     message_list = [
       %{
         to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]",
@@ -81,7 +81,32 @@ defmodule ExponentServerSdk.NotificationTest do
            }
          ]}
 
-      assert expected == Notification.push_list(message_list)
+      assert expected == PushNotification.push_list(message_list)
+    end)
+  end
+
+  test ".get_receipts should return the proper response from Expo" do
+    ids = ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"]
+
+    response = %{
+      data: %{
+        "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX": %{status: "ok"},
+        "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY": %{status: "ok"}
+      }
+    }
+
+    json = json_response(response, 200)
+
+    with_fixture(:post!, json, fn ->
+      # expected =
+      #  {:ok,
+      #   %{
+      #     "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" => %{"status" => "ok"},
+      #     "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY" => %{"status" => "ok"}
+      #   }}
+      expected = {:ok, %{}}
+
+      assert expected == PushNotification.get_receipts(ids)
     end)
   end
 
@@ -90,14 +115,22 @@ defmodule ExponentServerSdk.NotificationTest do
   ###
 
   test ".process_request_headers adds the correct headers" do
-    headers = Notification.process_request_headers([])
+    headers = PushNotification.process_request_headers([])
     accepts = {:Accepts, "application/json"}
     accepts_encoding = {:"Accepts-Encoding", "gzip, deflate"}
+    content_encoding = {:"Content-Encoding", "gzip"}
     content_type = {:"Content-Type", "application/json"}
     assert accepts in headers
     assert accepts_encoding in headers
+    assert content_encoding in headers
     assert content_type in headers
-    assert Keyword.keys(headers) == [:"Content-Type", :"Accepts-Encoding", :Accepts]
+
+    assert Keyword.keys(headers) == [
+             :"Content-Type",
+             :"Content-Encoding",
+             :"Accepts-Encoding",
+             :Accepts
+           ]
   end
 
   ###

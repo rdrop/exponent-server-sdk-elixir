@@ -76,6 +76,12 @@ defmodule ExponentServerSdk.PushMessageTest do
     assert messages == create_from_list(message_list)
   end
 
+  test ".create_receipt_id_list should return a validated list of ids into a map" do
+    ids = ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"]
+
+    assert ids == create_receipt_id_list(ids)
+  end
+
   # test ".validate_push_token should ensure a valid token is provided" do
   #  message = %PushMessage{
   #    badge: nil,

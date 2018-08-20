@@ -156,23 +156,55 @@ defmodule ExponentServerSdk.PushMessage do
   @spec create_from_list(list(map)) :: list(PushMessage.t())
   def create_from_list(messages) when is_list(messages) do
     messages
-    |> Enum.map(fn msg -> validate_push_token(struct(PushMessage, msg)) end)
-    |> Enum.reject(fn msg -> msg == nil end)
+    |> Enum.map(fn msg -> struct(PushMessage, msg) end)
     |> Enum.chunk_every(100)
+
+    # |> Enum.map(fn msg -> validate_push_token_from_message(struct(PushMessage, msg)) end)
+    # |> Enum.reject(fn msg -> msg == nil end)
   end
 
-  # @spec validate_push_token(PushMessage.t()) :: PushMessage.t()
-  defp validate_push_token(%PushMessage{to: push_token} = message) when is_map(message) do
-    token_list =
-      Regex.scan(~r/(?<=^ExponentPushToken\[)(.*)(?=[$\]])/, push_token, capture: :first)
+  @doc """
+  Create a List of PushMessageIds from a list.
 
-    [raw_token] = List.flatten(token_list)
+  ## Examples
+      iex> ids = ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"]
+      iex> ids = ExponentServerSdk.PushMessage.create_receipt_id_list(ids)
+      iex> ids
+      ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"]
+  """
+  @spec create_receipt_id_list(list) :: list
+  def create_receipt_id_list(push_token_ids) when is_list(push_token_ids) do
+    push_token_ids
 
-    if Regex.match?(~r/^ExponentPushToken\[/, push_token) && Regex.match?(~r/\]$/, push_token) &&
-         Regex.match?(~r/^[a-z\d]{8}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{12}$/i, raw_token) do
-      message
-    else
-      nil
-    end
+    # |> Enum.map(fn push_token_id -> validate_push_token_id_for_receipts(push_token_id) end)
+    # |> Enum.reject(fn push_token_id -> push_token_id == nil end)
   end
+
+  # @spec validate_push_token_id_for_receipts(String.t()) :: String.t() | nil
+  # defp validate_push_token_id_for_receipts(push_token_id) when is_binary(push_token_id) do
+  #   if Regex.match?(
+  #        ~r/^[a-z\d]{8}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{12}$/i,
+  #        push_token_id
+  #      ) do
+  #     push_token_id
+  #   else
+  #     nil
+  #   end
+  # end
+
+  # @spec validate_push_token_from_message(PushMessage.t()) :: PushMessage.t() | nil
+  # defp validate_push_token_from_message(%PushMessage{to: push_token} = message)
+  #      when is_map(message) do
+  #   token_list =
+  #     Regex.scan(~r/(?<=^ExponentPushToken\[)(.*)(?=[$\]])/, push_token, capture: :first)
+  #
+  #   [raw_token] = List.flatten(token_list)
+  #
+  #   if Regex.match?(~r/^ExponentPushToken\[/, push_token) && Regex.match?(~r/\]$/, push_token) &&
+  #        Regex.match?(~r/^[a-z\d]{8}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{4}-[a-z\d]{12}$/i, raw_token) do
+  #     message
+  #   else
+  #     nil
+  #   end
+  # end
 end

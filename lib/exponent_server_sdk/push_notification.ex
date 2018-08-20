@@ -1,4 +1,4 @@
-defmodule ExponentServerSdk.Notification do
+defmodule ExponentServerSdk.PushNotification do
   @moduledoc """
   Provides a basic HTTP interface to allow easy communication with the Exponent Push Notification
   API, by wrapping `HTTPotion`.
@@ -9,7 +9,7 @@ defmodule ExponentServerSdk.Notification do
   of the `Notification` module's functions. The correct URL to the resource is inferred
   from the module name.
 
-      ExponentServerSdk.Notification.push(messages)
+      ExponentServerSdk.PushNotification.push(messages)
       {:ok, %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}}
 
   Items are returned as instances of the given module's struct. For more
@@ -24,27 +24,39 @@ defmodule ExponentServerSdk.Notification do
   alias __MODULE__
 
   @doc """
-  Send the request when using a single message map
+  Send the push notification request when using a single message map
   """
   @spec push(PushMessage.t()) :: Parser.success() | Parser.error()
   def push(message) when is_map(message) do
     message
     |> PushMessage.create()
 
-    Notification.post!("", message)
+    PushNotification.post!("send", message)
     |> Parser.parse()
   end
 
   @doc """
-  Send the request when using a list of message maps
+  Send the push notification request when using a list of message maps
   """
   @spec push_list(list(PushMessage.t())) :: Parser.success() | Parser.error()
   def push_list(messages) when is_list(messages) do
     messages
     |> PushMessage.create_from_list()
 
-    Notification.post!("", messages)
+    PushNotification.post!("send", messages)
     |> Parser.parse_list()
+  end
+
+  @doc """
+  Send the get notification receipts request when using a list of ids
+  """
+  @spec get_receipts(list()) :: Parser.success() | Parser.error()
+  def get_receipts(ids) when is_list(ids) do
+    ids
+    |> PushMessage.create_receipt_id_list()
+
+    PushNotification.post!("getReceipts", %{ids: ids})
+    |> Parser.parse()
   end
 
   @doc """
@@ -52,7 +64,7 @@ defmodule ExponentServerSdk.Notification do
   """
   @spec process_url(String.t()) :: String.t()
   def process_url(url) do
-    "https://exp.host/--/api/v2/push/send" <> url
+    "https://exp.host/--/api/v2/push/" <> url
   end
 
   @doc """
@@ -63,14 +75,16 @@ defmodule ExponentServerSdk.Notification do
     headers
     |> Keyword.put(:Accepts, "application/json")
     |> Keyword.put(:"Accepts-Encoding", "gzip, deflate")
+    |> Keyword.put(:"Content-Encoding", "gzip")
     |> Keyword.put(:"Content-Type", "application/json")
   end
 
   @doc """
-  Automatically process the request body using Poison JSON parsing.
+  Automatically process the request body using Poison JSON and GZip.
   """
   def process_request_body(body) do
     body
     |> Poison.encode!()
+    |> :zlib.gzip()
   end
 end
