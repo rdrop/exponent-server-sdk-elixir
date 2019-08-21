@@ -96,7 +96,7 @@ ids = ["XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYY
 {:ok, response} = ExponentServerSdk.PushNotification.get_receipts(ids)
 
 # Example Response
-{:ok,[ %{ "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX": { "status": "ok" }, "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY": { "status": "ok" } } ]}
+{:ok,[ %{ "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX": %{ "status": "ok" }, "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY": %{ "status": "ok" } } ]}
 ```
 
 The complete format of the messages can be found [here.](https://docs.expo.io/versions/latest/guides/push-notifications#message-format)
