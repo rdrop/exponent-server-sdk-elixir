@@ -38,7 +38,7 @@ defmodule ExponentServerSdk.PushNotification do
   @doc """
   Send the push notification request when using a list of message maps
   """
-  @spec push_list(list(map)) :: Parser.success() | Parser.error()
+  @spec push_list(list(map)) :: Parser.success_list() | Parser.error()
   def push_list(messages) when is_list(messages) do
     messages
     |> PushMessage.create_from_list()
