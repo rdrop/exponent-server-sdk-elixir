@@ -4,7 +4,6 @@ defmodule ExponentServerSdk.PushMessage do
   @moduledoc """
   Provides a basic payload structure to allow easy communication with the Exponent Push Notification.
   """
-  @derive [Poison.Encoder]
   @enforce_keys [:to]
   defstruct to: nil,
             data: %{},
