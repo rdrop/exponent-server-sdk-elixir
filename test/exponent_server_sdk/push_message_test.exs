@@ -15,11 +15,11 @@ defmodule ExponentServerSdk.PushMessageTest do
     }
 
     message = %PushMessage{
-      badge: nil,
+      badge: 1,
       body: "You got your first message",
-      channelId: nil,
-      data: nil,
-      expiration: nil,
+      channelId: "Default",
+      data: %{},
+      expiration: 2419200,
       priority: "default",
       sound: "default",
       title: "Pushed!",
@@ -47,11 +47,11 @@ defmodule ExponentServerSdk.PushMessageTest do
     messages = [
       [
         %PushMessage{
-          badge: nil,
+          badge: 1,
           body: "You got your first message",
-          channelId: nil,
-          data: nil,
-          expiration: nil,
+          channelId: "Default",
+          data: %{},
+          expiration: 2419200,
           priority: "default",
           sound: "default",
           title: "Pushed!",
@@ -59,11 +59,11 @@ defmodule ExponentServerSdk.PushMessageTest do
           ttl: 0
         },
         %PushMessage{
-          badge: nil,
+          badge: 1,
           body: "You got your second message",
-          channelId: nil,
-          data: nil,
-          expiration: nil,
+          channelId: "Default",
+          data: %{},
+          expiration: 2419200,
           priority: "default",
           sound: "default",
           title: "Pushed Again!",

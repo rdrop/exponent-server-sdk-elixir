@@ -20,14 +20,15 @@ defmodule ExponentServerSdk.PushNotificationTest do
 
     with_fixture(:post!, json, fn ->
       # expected = {:ok, %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}}
-      expected =
-        {:ok,
-         %{
-           "status" => "error",
-           "details" => %{"error" => "DeviceNotRegistered"},
-           "message" =>
-             "\"ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]\" is not a registered push notification recipient"
-         }}
+      expected = {:ok, %{"status" => "ok", "id" => "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"}}
+        # {:ok,
+        #  %{
+        #    "status" => "error",
+        #    "details" => %{"error" => "DeviceNotRegistered"},
+        #    "message" =>
+        #      "\"ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]\" is not a registered push notification recipient"
+        #  }}
+
 
       assert expected == PushNotification.push(message_map)
     end)
@@ -38,12 +39,14 @@ defmodule ExponentServerSdk.PushNotificationTest do
       %{
         to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]",
         title: "Pushed!",
-        body: "You got your first message"
+        body: "You got your first message",
+        data: %{}
       },
       %{
         to: "ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]",
         title: "Pushed Again!",
-        body: "You got your second message"
+        body: "You got your second message",
+        data: %{}
       }
     ]
 
@@ -64,22 +67,24 @@ defmodule ExponentServerSdk.PushNotificationTest do
       #    %{"status" => "ok", "id" => "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"}
       #    ]
       #  }
-      expected =
-        {:ok,
-         [
-           %{
-             "status" => "error",
-             "details" => %{"error" => "DeviceNotRegistered"},
-             "message" =>
-               "\"ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]\" is not a registered push notification recipient"
-           },
-           %{
-             "status" => "error",
-             "details" => %{"error" => "DeviceNotRegistered"},
-             "message" =>
-               "\"ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]\" is not a registered push notification recipient"
-           }
-         ]}
+      expected = [
+        ok: [
+          %{
+            "details" => %{
+              "error" => "DeviceNotRegistered"
+            },
+            "message" => "\"ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]\" is not a registered push notification recipient",
+            "status" => "error"
+          },
+          %{
+            "details" => %{
+              "error" => "DeviceNotRegistered"
+            },
+            "message" => "\"ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]\" is not a registered push notification recipient",
+            "status" => "error"
+          }
+        ]
+      ]
 
       assert expected == PushNotification.push_list(message_list)
     end)
@@ -159,11 +164,11 @@ defmodule ExponentServerSdk.PushNotificationTest do
         [
           [
             %PushMessage{
-              badge: nil,
+              badge: 0,
               body: "You got your first message",
-              channelId: nil,
-              data: nil,
-              expiration: nil,
+              channelId: "Default",
+              data: %{},
+              expiration: 2419200,
               priority: "default",
               sound: "default",
               title: "Pushed!",
@@ -171,11 +176,11 @@ defmodule ExponentServerSdk.PushNotificationTest do
               ttl: 0
             },
             %PushMessage{
-              badge: nil,
+              badge: 0,
               body: "You got your second message",
-              channelId: nil,
-              data: nil,
-              expiration: nil,
+              channelId: "Default",
+              data: %{},
+              expiration: 2419200,
               priority: "default",
               sound: "default",
               title: "Pushed Again!",
