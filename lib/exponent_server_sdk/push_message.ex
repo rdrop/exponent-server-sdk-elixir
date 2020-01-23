@@ -4,17 +4,18 @@ defmodule ExponentServerSdk.PushMessage do
   @moduledoc """
   Provides a basic payload structure to allow easy communication with the Exponent Push Notification.
   """
+  @derive [Poison.Encoder]
   @enforce_keys [:to]
   defstruct to: nil,
-            data: nil,
+            data: %{},
             title: nil,
             body: nil,
             ttl: 0,
-            expiration: nil,
+            expiration: 2419200,
             priority: "default",
             sound: "default",
-            badge: nil,
-            channelId: nil
+            badge: 1,
+            channelId: "Default"
 
   @typedoc """
       https://docs.expo.io/versions/v29.0.0/guides/push-notifications#message-format
@@ -137,7 +138,7 @@ defmodule ExponentServerSdk.PushMessage do
       iex> message_map = %{to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", title: "Pushed!", body: "You got your first message"}
       iex> message = ExponentServerSdk.PushMessage.create(message_map)
       iex> message
-      %ExponentServerSdk.PushMessage{badge: nil, body: "You got your first message", channelId: nil, data: nil, expiration: nil, priority: "default", sound: "default", title: "Pushed!", to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", ttl: 0}
+      %ExponentServerSdk.PushMessage{badge: 1, body: "You got your first message", channelId: "Default", data: %{}, expiration: 2419200, priority: "default", sound: "default", title: "Pushed!", to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", ttl: 0}
   """
   @spec create(map) :: PushMessage.t()
   def create(message) when is_map(message) do
@@ -151,7 +152,7 @@ defmodule ExponentServerSdk.PushMessage do
       iex> message_list = [%{to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", title: "Pushed!", body: "You got your first message"}, %{to: "ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]", title: "Pushed Again!", body: "You got your second message"}]
       iex> messages = ExponentServerSdk.PushMessage.create_from_list(message_list)
       iex> messages
-      [[%ExponentServerSdk.PushMessage{badge: nil, body: "You got your first message", channelId: nil, data: nil, expiration: nil, priority: "default", sound: "default", title: "Pushed!", to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", ttl: 0}, %ExponentServerSdk.PushMessage{ badge: nil, body: "You got your second message", channelId: nil, data: nil, expiration: nil, priority: "default", sound: "default", title: "Pushed Again!", to: "ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]", ttl: 0}]]
+      [[%ExponentServerSdk.PushMessage{badge: 1, body: "You got your first message", channelId: "Default", data: %{}, expiration: 2419200, priority: "default", sound: "default", title: "Pushed!", to: "ExponentPushToken[XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX]", ttl: 0}, %ExponentServerSdk.PushMessage{ badge: 1, body: "You got your second message", channelId: "Default", data: %{}, expiration: 2419200, priority: "default", sound: "default", title: "Pushed Again!", to: "ExponentPushToken[YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY]", ttl: 0}]]
   """
   @spec create_from_list(list(map)) :: list(PushMessage.t())
   def create_from_list(messages) when is_list(messages) do
