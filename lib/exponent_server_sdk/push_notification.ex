@@ -41,7 +41,6 @@ defmodule ExponentServerSdk.PushNotification do
   def push_list(messages) when is_list(messages) do
     messages
     |> PushMessage.create_from_list
-    # |> Enum.chunk_every(100)
     |> push_messages_list
   end
 
